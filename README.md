@@ -324,7 +324,7 @@ scripts/indexes.sql
 ### 1. Clone Repository
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/geekynakshtra/analytics-backend-service.git
 cd analytics-backend-service
 ```
 
