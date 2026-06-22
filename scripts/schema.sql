@@ -1,3 +1,28 @@
+CREATE TABLE IF NOT EXISTS mock_customers (
+    id INTEGER PRIMARY KEY,
+    name VARCHAR(120) NOT NULL,
+    email VARCHAR(150) UNIQUE NOT NULL,
+    country VARCHAR(80) NOT NULL,
+    created_at TIMESTAMP NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS mock_orders (
+    id INTEGER PRIMARY KEY,
+    customer_id INTEGER NOT NULL,
+    amount NUMERIC(12, 2) NOT NULL,
+    status VARCHAR(30) NOT NULL,
+    created_at TIMESTAMP NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS mock_refunds (
+    id INTEGER PRIMARY KEY,
+    order_id INTEGER NOT NULL,
+    customer_id INTEGER NOT NULL,
+    amount NUMERIC(12, 2) NOT NULL,
+    reason VARCHAR(120) NOT NULL,
+    created_at TIMESTAMP NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS customers (
     id INTEGER PRIMARY KEY,
     name VARCHAR(120) NOT NULL,
@@ -50,6 +75,14 @@ CREATE TABLE IF NOT EXISTS top_customers (
     total_spend NUMERIC(14, 2) NOT NULL,
     order_count INTEGER NOT NULL
 );
+
+CREATE INDEX IF NOT EXISTS idx_mock_orders_customer_id ON mock_orders(customer_id);
+CREATE INDEX IF NOT EXISTS idx_mock_orders_created_at ON mock_orders(created_at);
+CREATE INDEX IF NOT EXISTS idx_mock_orders_status ON mock_orders(status);
+
+CREATE INDEX IF NOT EXISTS idx_mock_refunds_order_id ON mock_refunds(order_id);
+CREATE INDEX IF NOT EXISTS idx_mock_refunds_customer_id ON mock_refunds(customer_id);
+CREATE INDEX IF NOT EXISTS idx_mock_refunds_created_at ON mock_refunds(created_at);
 
 CREATE INDEX IF NOT EXISTS idx_orders_customer_id ON orders(customer_id);
 CREATE INDEX IF NOT EXISTS idx_orders_created_at ON orders(created_at);

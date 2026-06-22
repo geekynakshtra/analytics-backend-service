@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
 from app.db.database import get_db
-from app.models.tables import Customer, Order, Refund
+from app.models.tables import MockCustomer, MockOrder, MockRefund
 
 router = APIRouter(prefix="/mock", tags=["Mock APIs"])
 
@@ -32,7 +32,7 @@ def get_customers(
     page_size: int = Query(1000, ge=1, le=10000),
     db: Session = Depends(get_db),
 ):
-    query = db.query(Customer).order_by(Customer.id)
+    query = db.query(MockCustomer).order_by(MockCustomer.id)
     return paginate_query(query, page, page_size)
 
 
@@ -42,7 +42,7 @@ def get_orders(
     page_size: int = Query(1000, ge=1, le=10000),
     db: Session = Depends(get_db),
 ):
-    query = db.query(Order).order_by(Order.id)
+    query = db.query(MockOrder).order_by(MockOrder.id)
     return paginate_query(query, page, page_size)
 
 
@@ -52,5 +52,5 @@ def get_refunds(
     page_size: int = Query(1000, ge=1, le=10000),
     db: Session = Depends(get_db),
 ):
-    query = db.query(Refund).order_by(Refund.id)
+    query = db.query(MockRefund).order_by(MockRefund.id)
     return paginate_query(query, page, page_size)

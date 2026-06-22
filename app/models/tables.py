@@ -13,6 +13,37 @@ from sqlalchemy.sql import func
 from app.db.database import Base
 
 
+class MockCustomer(Base):
+    __tablename__ = "mock_customers"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(120), nullable=False)
+    email = Column(String(150), unique=True, nullable=False)
+    country = Column(String(80), nullable=False)
+    created_at = Column(DateTime, nullable=False)
+
+
+class MockOrder(Base):
+    __tablename__ = "mock_orders"
+
+    id = Column(Integer, primary_key=True, index=True)
+    customer_id = Column(Integer, nullable=False)
+    amount = Column(Numeric(12, 2), nullable=False)
+    status = Column(String(30), nullable=False)
+    created_at = Column(DateTime, nullable=False)
+
+
+class MockRefund(Base):
+    __tablename__ = "mock_refunds"
+
+    id = Column(Integer, primary_key=True, index=True)
+    order_id = Column(Integer, nullable=False)
+    customer_id = Column(Integer, nullable=False)
+    amount = Column(Numeric(12, 2), nullable=False)
+    reason = Column(String(120), nullable=False)
+    created_at = Column(DateTime, nullable=False)
+
+
 class Customer(Base):
     __tablename__ = "customers"
 
@@ -77,6 +108,14 @@ class TopCustomer(Base):
     total_spend = Column(Numeric(14, 2), nullable=False)
     order_count = Column(Integer, nullable=False)
 
+
+Index("idx_mock_orders_customer_id", MockOrder.customer_id)
+Index("idx_mock_orders_created_at", MockOrder.created_at)
+Index("idx_mock_orders_status", MockOrder.status)
+
+Index("idx_mock_refunds_order_id", MockRefund.order_id)
+Index("idx_mock_refunds_customer_id", MockRefund.customer_id)
+Index("idx_mock_refunds_created_at", MockRefund.created_at)
 
 Index("idx_orders_customer_id", Order.customer_id)
 Index("idx_orders_created_at", Order.created_at)

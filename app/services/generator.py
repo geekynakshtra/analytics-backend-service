@@ -5,7 +5,17 @@ from decimal import Decimal
 from faker import Faker
 from sqlalchemy.orm import Session
 
-from app.models.tables import Customer, Order, Refund
+from app.models.tables import (
+    Customer,
+    Order,
+    Refund,
+    MockCustomer,
+    MockOrder,
+    MockRefund,
+    AnalyticsSummary,
+    RevenueTrend,
+    TopCustomer,
+)
 
 
 fake = Faker()
@@ -19,9 +29,18 @@ BATCH_SIZE = 10_000
 
 
 def clear_existing_data(db: Session):
+    db.query(TopCustomer).delete()
+    db.query(RevenueTrend).delete()
+    db.query(AnalyticsSummary).delete()
+
     db.query(Refund).delete()
     db.query(Order).delete()
     db.query(Customer).delete()
+
+    db.query(MockRefund).delete()
+    db.query(MockOrder).delete()
+    db.query(MockCustomer).delete()
+
     db.commit()
 
 
@@ -48,13 +67,13 @@ def generate_customers(db: Session, seed: int):
         )
 
         if len(customers) >= BATCH_SIZE:
-            db.bulk_insert_mappings(Customer, customers)
+            db.bulk_insert_mappings(MockCustomer, customers)
             db.commit()
             customers.clear()
             print(f"Inserted customers up to {i}")
 
     if customers:
-        db.bulk_insert_mappings(Customer, customers)
+        db.bulk_insert_mappings(MockCustomer, customers)
         db.commit()
 
     print("Customers generated successfully")
@@ -85,13 +104,13 @@ def generate_orders(db: Session, seed: int):
         )
 
         if len(orders) >= BATCH_SIZE:
-            db.bulk_insert_mappings(Order, orders)
+            db.bulk_insert_mappings(MockOrder, orders)
             db.commit()
             orders.clear()
             print(f"Inserted orders up to {i}")
 
     if orders:
-        db.bulk_insert_mappings(Order, orders)
+        db.bulk_insert_mappings(MockOrder, orders)
         db.commit()
 
     print("Orders generated successfully")
@@ -129,13 +148,13 @@ def generate_refunds(db: Session, seed: int):
         )
 
         if len(refunds) >= BATCH_SIZE:
-            db.bulk_insert_mappings(Refund, refunds)
+            db.bulk_insert_mappings(MockRefund, refunds)
             db.commit()
             refunds.clear()
             print(f"Inserted refunds up to {i}")
 
     if refunds:
-        db.bulk_insert_mappings(Refund, refunds)
+        db.bulk_insert_mappings(MockRefund, refunds)
         db.commit()
 
     print("Refunds generated successfully")
